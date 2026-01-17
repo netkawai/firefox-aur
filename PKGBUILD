@@ -210,9 +210,9 @@ END
 package() {
   cd firefox-$pkgver
   DESTDIR="$pkgdir" ./mach install
+  local appdir="$pkgdir/usr/lib/$pkgname"
 
-  local vendorjs="$pkgdir/usr/lib/$pkgname/browser/defaults/preferences/vendor.js"
-  install -Dvm644 /dev/stdin "$vendorjs" <<END
+  install -Dvm644 /dev/stdin "$appdir/browser/defaults/preferences/vendor.js" <<END
 // Use LANG environment variable to choose locale
 pref("intl.locale.requested", "");
 
@@ -229,8 +229,7 @@ pref("extensions.autoDisableScopes", 11);
 pref("browser.gnome-search-provider.enabled", true);
 END
 
-  local distini="$pkgdir/usr/lib/$pkgname/distribution/distribution.ini"
-  install -Dvm644 /dev/stdin "$distini" <<END
+  install -Dvm644 /dev/stdin "$appdir/distribution/distribution.ini" <<END
 [Global]
 id=archlinux
 version=1.0
@@ -243,7 +242,7 @@ app.partner.archlinux=archlinux
 END
 
   # Link up system ONNX runtime
-  ln -srv "$pkgdir/usr/lib/libonnxruntime.so" -t "$pkgdir/usr/lib/$pkgname"
+  ln -srv "$pkgdir/usr/lib/libonnxruntime.so" -t "$appdir"
 
   # Install desktop icons and metadata
   local i theme=official
@@ -272,8 +271,13 @@ END
   # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
   ln -srfv "$pkgdir/usr/bin/$pkgname" "$pkgdir/usr/lib/$pkgname/firefox-bin"
 
-  local sprovider="$pkgdir/usr/share/gnome-shell/search-providers/$pkgname.search-provider.ini"
-  install -Dvm644 /dev/stdin "$sprovider" <<END
+  # Use system certificates
+  if [[ -e $appdir/libnss3.so ]]; then
+    ln -sfv ../libnssckbi.so -t "$appdir"
+  fi
+
+  # Register GNOME search provider
+  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$pkgname.search-provider.ini" <<END
 [Shell Search Provider]
 DesktopId=$pkgname.desktop
 BusName=org.mozilla.${pkgname//-/_}.SearchProvider
