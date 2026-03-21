@@ -2,9 +2,10 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
-pkgname=firefox
+pkgname=firefox-local
 pkgver=148.0.2
 pkgrel=1
+_pkgname=firefox
 pkgdesc="Fast, Private & Safe Web Browser"
 url="https://www.mozilla.org/firefox/"
 arch=(x86_64)
@@ -60,7 +61,7 @@ makedepends=(
   wasi-libc
   wasi-libc++
   wasi-libc++abi
-  xorg-server-xvfb
+  # xorg-server-xvfb
   yasm
   zip
 )
@@ -72,16 +73,19 @@ optdepends=(
   'speech-dispatcher: Text-to-Speech'
   'xdg-desktop-portal: Screensharing with Wayland'
 )
+provides=(firefox)
+conflicts=(firefox)
 options=(
+  !debug
   !emptydirs
   !lto
   !makeflags
 )
 source=(
   https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
-  $pkgname-symbolic.svg
-  $pkgname.desktop
-  org.mozilla.$pkgname.metainfo.xml
+  $_pkgname-symbolic.svg
+  $_pkgname.desktop
+  org.mozilla.$_pkgname.metainfo.xml
   0001-Install-under-remoting-name.patch
   0002-Bug-2012006-WebRTC-backport-PipeWire-capture-clear-e.patch
   0003-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
@@ -150,6 +154,13 @@ ac_add_options --disable-install-strip
 ac_add_options --disable-bootstrap
 ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
 
+# disable debug and updater
+ac_add_options --disable-updater
+ac_add_options --disable-artifact-builds
+ac_add_options --disable-debug
+ac_add_options --disable-debug-symbols
+ac_add_options --disable-debug-js-modules
+
 # Branding
 ac_add_options --enable-official-branding
 ac_add_options --enable-update-channel=release
@@ -170,9 +181,24 @@ ac_add_options --with-system-nss
 # Features
 ac_add_options --enable-alsa
 ac_add_options --enable-jack
-ac_add_options --enable-crashreporter
+ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 ac_add_options --disable-tests
+ac_add_options --disable-webrtc
+ac_add_options --disable-eme
+ac_add_options --disable-default-browser-agent
+ac_add_options --disable-parental-controls
+ac_add_options --disable-accessibility
+
+# use system
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-libevent
+ac_add_options --with-system-libvpx
+ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+ac_add_options --with-system-webp
+ac_add_options --with-system-zlib
+
 END
 }
 
@@ -196,6 +222,9 @@ build() {
   ulimit -n 4096
 
   # Do 3-tier PGO
+  if :; then
+     echo "Skip PGO"
+  else
   echo "Building instrumented browser..."
   cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-profile-generate=cross
@@ -217,13 +246,13 @@ END
 
   echo "Removing instrumented browser..."
   ./mach clobber objdir
-
-  echo "Building optimized browser..."
+  fi
+  echo "Building browser..."
   cat >.mozconfig ../mozconfig - <<END
-ac_add_options --enable-lto=cross,full
-ac_add_options --enable-profile-use=cross
-ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
-ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
+#ac_add_options --enable-lto=cross,full
+#ac_add_options --enable-profile-use=cross
+#ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
+#ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
   ./mach build --priority normal
 }
@@ -231,9 +260,13 @@ END
 package() {
   cd firefox-$pkgver
   DESTDIR="$pkgdir" ./mach install
-  local appdir="$pkgdir/usr/lib/$pkgname"
+  local appdir="$pkgdir/usr/lib/$_pkgname"
+
+  #rename?
+  mv $pkgdir/usr/lib/$pkgname $pkgdir/usr/lib/$_pkgname
 
   install -Dvm644 /dev/stdin "$appdir/browser/defaults/preferences/vendor.js" <<END
+
 // Use LANG environment variable to choose locale
 pref("intl.locale.requested", "");
 
@@ -247,10 +280,14 @@ pref("browser.shell.checkDefaultBrowser", false);
 pref("extensions.autoDisableScopes", 11);
 
 // Enable GNOME Shell search provider
-pref("browser.gnome-search-provider.enabled", true);
+pref("browser.gnome-search-provider.enabled", false);
+
+// Disable Wayland fractional scaling
+pref("widget.wayland.fractional-scale.enabled", false);
 END
 
   install -Dvm644 /dev/stdin "$appdir/distribution/distribution.ini" <<END
+
 [Global]
 id=archlinux
 version=1.0
@@ -258,7 +295,7 @@ about=Mozilla Firefox for Arch Linux
 
 [Preferences]
 app.distributor=archlinux
-app.distributor.channel=$pkgname
+app.distributor.channel=$_pkgname
 app.partner.archlinux=archlinux
 END
 
@@ -269,28 +306,28 @@ END
   local i theme=official
   for i in 16 22 24 32 48 64 128 256; do
     install -Dvm644 browser/branding/$theme/default$i.png \
-      "$pkgdir/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png"
+      "$pkgdir/usr/share/icons/hicolor/${i}x${i}/apps/$_pkgname.png"
   done
   install -Dvm644 browser/branding/$theme/content/about-logo.png \
-    "$pkgdir/usr/share/icons/hicolor/192x192/apps/$pkgname.png"
+    "$pkgdir/usr/share/icons/hicolor/192x192/apps/$_pkgname.png"
   install -Dvm644 browser/branding/$theme/content/about-logo@2x.png \
-    "$pkgdir/usr/share/icons/hicolor/384x384/apps/$pkgname.png"
+    "$pkgdir/usr/share/icons/hicolor/384x384/apps/$_pkgname.png"
   install -Dvm644 browser/branding/$theme/content/about-logo.svg \
-    "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
+    "$pkgdir/usr/share/icons/hicolor/scalable/apps/$_pkgname.svg"
 
-  install -Dvm644 ../$pkgname-symbolic.svg -t "$pkgdir/usr/share/icons/hicolor/symbolic/apps"
-  install -Dvm644 ../$pkgname.desktop -t "$pkgdir/usr/share/applications"
-  install -Dvm644 ../org.mozilla.$pkgname.metainfo.xml -t "$pkgdir/usr/share/metainfo"
+  install -Dvm644 ../$_pkgname-symbolic.svg -t "$pkgdir/usr/share/icons/hicolor/symbolic/apps"
+  install -Dvm644 ../$_pkgname.desktop -t "$pkgdir/usr/share/applications"
+  install -Dvm644 ../org.mozilla.$_pkgname.metainfo.xml -t "$pkgdir/usr/share/metainfo"
 
   # Install a wrapper to avoid confusion about binary path
-  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/$pkgname" <<END
+  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/$_pkgname" <<END
 #!/bin/sh
-exec /usr/lib/$pkgname/firefox "\$@"
+exec /usr/lib/$_pkgname/firefox "\$@"
 END
 
   # Replace duplicate binary with wrapper
   # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
-  ln -srfv "$pkgdir/usr/bin/$pkgname" "$pkgdir/usr/lib/$pkgname/firefox-bin"
+  ln -srfv "$pkgdir/usr/bin/$_pkgname" "$pkgdir/usr/lib/$_pkgname/firefox-bin"
 
   # Use system certificates
   if [[ -e $appdir/libnss3.so ]]; then
@@ -298,11 +335,12 @@ END
   fi
 
   # Register GNOME search provider
-  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$pkgname.search-provider.ini" <<END
+  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$_pkgname.search-provider.ini" <<END
+
 [Shell Search Provider]
-DesktopId=$pkgname.desktop
-BusName=org.mozilla.${pkgname//-/_}.SearchProvider
-ObjectPath=/org/mozilla/${pkgname//-/_}/SearchProvider
+DesktopId=$_pkgname.desktop
+BusName=org.mozilla.${_pkgname//-/_}.SearchProvider
+ObjectPath=/org/mozilla/${_pkgname//-/_}/SearchProvider
 Version=2
 END
 }

@@ -1,0 +1,31 @@
+diff --git a/browser/components/extensions/parent/ext-menus.js b/browser/components/extensions/parent/ext-menus.js
+index f803a19362..dcfd8def3d 100644
+--- a/browser/components/extensions/parent/ext-menus.js
++++ b/browser/components/extensions/parent/ext-menus.js
+@@ -569,14 +569,20 @@ var gMenuBuilder = {
+ 
+     let target = event.target;
+     target.removeEventListener("popuphidden", this);
+-    for (let item of this.itemsToCleanUp) {
+-      item.remove();
+-    }
++    let itemsToCleanUp = Array.from(this.itemsToCleanUp);
+     this.itemsToCleanUp.clear();
+-    for (let extension of gShownMenuItems.keys()) {
+-      extension.emit("webext-menu-hidden");
+-    }
++
++    let extensions = Array.from(gShownMenuItems.keys());
++
+     gShownMenuItems.clear();
++    Services.tm.dispatchToMainThread(() => {
++      for (let item of itemsToCleanUp) {
++        item.remove();
++      }
++      for (let extension of extensions) {
++        extension.emit("webext-menu-hidden");
++      }
++    });
+   },
+ 
+   itemsToCleanUp: new Set(),
