@@ -90,6 +90,7 @@ source=(
   0002-Bug-2012006-WebRTC-backport-PipeWire-capture-clear-e.patch
   0003-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
   0004-Fix-sandbox-to-build-with-glibc-2.43.patch
+  0005-context-popup-menu-fix.patch
 )
 validpgpkeys=(
   # Mozilla Software Releases <release@mozilla.com>
@@ -104,7 +105,8 @@ sha256sums=('a6cb8e4d5e596cd52475bab9b4d399240f10c4211718b9d72ca6b2e9c9244e90'
             'ef63a12975f108f30b00bb3290d9ca76f311d8af9c1d5dfc0d8335ad57e8f77c'
             'eaa1e9c177f83ae9f20009b77eab8f97a8ad7ed5e4502999211d4eab57835774'
             '83857f3531688885b62be0b06583f6815f236edbc43a942830395ec3cbdc7934'
-            '8d2182ae8660474ac567482fe6658af77f3b402314e361c846528ae171586245')
+            '8d2182ae8660474ac567482fe6658af77f3b402314e361c846528ae171586245'
+            'SKIP' )
 b2sums=('ba2036baf01584d37b25944a50b497d18e238334ec866846c676b518fbb66ede35404a7db73da7b54862c876fa262d679b4e1099368b7d905afbd1f499036084'
         'SKIP'
         '63a8dd9d8910f9efb353bed452d8b4b2a2da435857ccee083fc0c557f8c4c1339ca593b463db320f70387a1b63f1a79e709e9d12c69520993e26d85a3d742e34'
@@ -113,7 +115,8 @@ b2sums=('ba2036baf01584d37b25944a50b497d18e238334ec866846c676b518fbb66ede35404a7
         'ff0ba11844e99ab1b1fed91d70c6f45837198ba43e77313c8b9c48a621e40c459953fc35283b6b6eafb5641510a5ce1e18ebda4d7d076f8212810391c0a9234b'
         '512a387e28b64743f9086019860c649d7b08cf69aa10f256b39790fb9ab403ddad7693900684dfeb59206036940f7a273cede822b1395c947dd482f617f13729'
         'd6b74848d04f9719946dd2a1a301412ffee1ec9c8561542ad3f9f7c691da135b7978a19ddd1d6f7f4b47654f4b2494673e4a3b000211f94cca51adf90d7ef73b'
-        '87e514cb3d5045489176a6d335f23ef82fa7b2805f689d8e4d9090dccf426c432e862a5dd537d91ceab6cc0a531fef9aa31fa2526666926224fcfdbd86c991a9')
+        '87e514cb3d5045489176a6d335f23ef82fa7b2805f689d8e4d9090dccf426c432e862a5dd537d91ceab6cc0a531fef9aa31fa2526666926224fcfdbd86c991a9'
+        'SKIP' )
 
 # Google API keys (see https://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for Arch Linux use ONLY. For your own distribution, please
@@ -137,6 +140,8 @@ prepare() {
   patch -Np1 -i ../0003-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
   # https://bugzilla.mozilla.org/show_bug.cgi?id=2016618
   patch -Np1 -i ../0004-Fix-sandbox-to-build-with-glibc-2.43.patch
+
+  patch -Np1 -i ../0005-context-popup-menu-fix.patch
 
   echo -n "$_google_api_key" >google-api-key
 
