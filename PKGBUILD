@@ -3,7 +3,7 @@
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
 pkgname=firefox-local
-pkgver=148.0.2
+pkgver=149.0
 pkgrel=1
 _pkgname=firefox
 pkgdesc="Fast, Private & Safe Web Browser"
@@ -76,7 +76,6 @@ optdepends=(
 provides=(firefox)
 conflicts=(firefox)
 options=(
-  !debug
   !emptydirs
   !lto
   !makeflags
@@ -87,9 +86,9 @@ source=(
   $_pkgname.desktop
   org.mozilla.$_pkgname.metainfo.xml
   0001-Install-under-remoting-name.patch
-  0002-Bug-2012006-WebRTC-backport-PipeWire-capture-clear-e.patch
-  0003-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
-  0004-Fix-sandbox-to-build-with-glibc-2.43.patch
+  0002-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
+  0003-Bug-2016618-Fix-Linux-sandbox-build-breakage-on-glib.patch
+  0004-Use-wasm32-wasip1-target.patch
   0005-context-popup-menu-fix.patch
 )
 validpgpkeys=(
@@ -97,27 +96,18 @@ validpgpkeys=(
   # https://blog.mozilla.org/security/2025/04/01/updated-gpg-key-for-signing-firefox-releases-2/
   14F26682D0916CDD81E37B6D61B7B526D98F0353
 )
-sha256sums=('a6cb8e4d5e596cd52475bab9b4d399240f10c4211718b9d72ca6b2e9c9244e90'
+sha256sums=('b861fdee999d9b6404e1e865d6f707c41b4bded1b5ea62affc176288c1484b8a'
             'SKIP'
             'a9b8b4a0a1f4a7b4af77d5fc70c2686d624038909263c795ecc81e0aec7711e9'
             '2a51d57d98fbda86f094bc991e1ad4dd6e8a9d32fd0836b1183bf70ec4b68915'
             '23f557fa7989adcae03cc9458d94716981dbcf0e9d6d52a289a2426e50b4b785'
-            'ef63a12975f108f30b00bb3290d9ca76f311d8af9c1d5dfc0d8335ad57e8f77c'
-            'eaa1e9c177f83ae9f20009b77eab8f97a8ad7ed5e4502999211d4eab57835774'
-            '83857f3531688885b62be0b06583f6815f236edbc43a942830395ec3cbdc7934'
-            '8d2182ae8660474ac567482fe6658af77f3b402314e361c846528ae171586245'
             'SKIP' )
-b2sums=('ba2036baf01584d37b25944a50b497d18e238334ec866846c676b518fbb66ede35404a7db73da7b54862c876fa262d679b4e1099368b7d905afbd1f499036084'
+b2sums=('8b1d084dc2b8a7de85cc54aef57adda94afa191d4adb7a6e6ef1339e8a3cc7a7d8a42df52f858bcff358f69382e163ba42b2142126dcdbd1ad1cdc4bad0c0114'
         'SKIP'
         '63a8dd9d8910f9efb353bed452d8b4b2a2da435857ccee083fc0c557f8c4c1339ca593b463db320f70387a1b63f1a79e709e9d12c69520993e26d85a3d742e34'
         '63c62c85ee70e22b02e9ea34e69f04f50403b7634b99fb0e996a83c963916dc4224041a0b265e54f6c224bd1777ddfdeb255037e3e30fec288695f3050278b05'
         '1a7fc030b1051df00df1b2f5b247b8c658de6cdfba0788041c830da3aaaa6ac974ab684e05feb80672aa2d2c22294cacfa93a71dc664b3e60becdd65e879fcee'
-        'ff0ba11844e99ab1b1fed91d70c6f45837198ba43e77313c8b9c48a621e40c459953fc35283b6b6eafb5641510a5ce1e18ebda4d7d076f8212810391c0a9234b'
-        '512a387e28b64743f9086019860c649d7b08cf69aa10f256b39790fb9ab403ddad7693900684dfeb59206036940f7a273cede822b1395c947dd482f617f13729'
-        'd6b74848d04f9719946dd2a1a301412ffee1ec9c8561542ad3f9f7c691da135b7978a19ddd1d6f7f4b47654f4b2494673e4a3b000211f94cca51adf90d7ef73b'
-        '87e514cb3d5045489176a6d335f23ef82fa7b2805f689d8e4d9090dccf426c432e862a5dd537d91ceab6cc0a531fef9aa31fa2526666926224fcfdbd86c991a9'
-        'SKIP' )
-
+              'SKIP' )
 # Google API keys (see https://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for Arch Linux use ONLY. For your own distribution, please
 # get your own set of keys.
@@ -130,16 +120,14 @@ prepare() {
   # Make different channels installable in parallel
   patch -Np1 -i ../0001-Install-under-remoting-name.patch
 
-  # Prevent WebRTC crash
-  # https://gitlab.archlinux.org/archlinux/packaging/packages/firefox/-/issues/27
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=2012006
-  patch -Np1 -i ../0002-Bug-2012006-WebRTC-backport-PipeWire-capture-clear-e.patch
-
   # Fix build with glibc 2.43
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1999625
-  patch -Np1 -i ../0003-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
+  patch -Np1 -i ../0002-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
   # https://bugzilla.mozilla.org/show_bug.cgi?id=2016618
-  patch -Np1 -i ../0004-Fix-sandbox-to-build-with-glibc-2.43.patch
+  patch -Np1 -i ../0003-Bug-2016618-Fix-Linux-sandbox-build-breakage-on-glib.patch
+
+  # Fix build with Clang 22
+  patch -Np1 -i ../0004-Use-wasm32-wasip1-target.patch
 
   patch -Np1 -i ../0005-context-popup-menu-fix.patch
 
@@ -173,7 +161,7 @@ ac_add_options --with-distribution-id=org.archlinux
 ac_add_options --with-unsigned-addon-scopes=app,system
 ac_add_options --allow-addon-sideload
 export MOZILLA_OFFICIAL=1
-export MOZ_APP_REMOTINGNAME=$pkgname
+export MOZ_APP_REMOTINGNAME=$_pkgname
 
 # Keys
 ac_add_options --with-google-location-service-api-keyfile=${PWD@Q}/google-api-key
@@ -251,13 +239,14 @@ END
 
   echo "Removing instrumented browser..."
   ./mach clobber objdir
+  
   fi
   echo "Building browser..."
   cat >.mozconfig ../mozconfig - <<END
-#ac_add_options --enable-lto=cross,full
-#ac_add_options --enable-profile-use=cross
-#ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
-#ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
+ac_add_options --enable-lto=cross,full
+ac_add_options --enable-profile-use=cross
+ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
+ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
   ./mach build --priority normal
 }
@@ -265,11 +254,11 @@ END
 package() {
   cd firefox-$pkgver
   DESTDIR="$pkgdir" ./mach install
+
   local appdir="$pkgdir/usr/lib/$_pkgname"
 
-  #rename?
   mv $pkgdir/usr/lib/$pkgname $pkgdir/usr/lib/$_pkgname
-
+  
   install -Dvm644 /dev/stdin "$appdir/browser/defaults/preferences/vendor.js" <<END
 
 // Use LANG environment variable to choose locale
@@ -286,13 +275,9 @@ pref("extensions.autoDisableScopes", 11);
 
 // Enable GNOME Shell search provider
 pref("browser.gnome-search-provider.enabled", false);
-
-// Disable Wayland fractional scaling
-pref("widget.wayland.fractional-scale.enabled", false);
 END
 
   install -Dvm644 /dev/stdin "$appdir/distribution/distribution.ini" <<END
-
 [Global]
 id=archlinux
 version=1.0
@@ -318,6 +303,7 @@ END
   install -Dvm644 browser/branding/$theme/content/about-logo@2x.png \
     "$pkgdir/usr/share/icons/hicolor/384x384/apps/$_pkgname.png"
   install -Dvm644 browser/branding/$theme/content/about-logo.svg \
+
     "$pkgdir/usr/share/icons/hicolor/scalable/apps/$_pkgname.svg"
 
   install -Dvm644 ../$_pkgname-symbolic.svg -t "$pkgdir/usr/share/icons/hicolor/symbolic/apps"
@@ -340,14 +326,15 @@ END
   fi
 
   # Register GNOME search provider
-  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$_pkgname.search-provider.ini" <<END
-
+  if false; then
+  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$pkgname.search-provider.ini" <<END
 [Shell Search Provider]
-DesktopId=$_pkgname.desktop
-BusName=org.mozilla.${_pkgname//-/_}.SearchProvider
-ObjectPath=/org/mozilla/${_pkgname//-/_}/SearchProvider
+DesktopId=$pkgname.desktop
+BusName=org.mozilla.${pkgname//-/_}.SearchProvider
+ObjectPath=/org/mozilla/${pkgname//-/_}/SearchProvider
 Version=2
 END
+   fi
 }
 
 # vim:set sw=2 sts=-1 et:
