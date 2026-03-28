@@ -153,6 +153,7 @@ ac_add_options --disable-install-strip
 ac_add_options --disable-bootstrap
 ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
 
+
 # disable debug and updater
 ac_add_options --disable-updater
 ac_add_options --disable-artifact-builds
@@ -208,6 +209,8 @@ build() {
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export MOZ_BUILD_DATE="$(date -u${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH} +%Y%m%d%H%M%S)"
   export MOZ_NOSPAM=1
+  export RUSTC=/usr/bin/rustc
+  export CARGO=/usr/bin/cargo
 
   # malloc_usable_size is used in various parts of the codebase
   CFLAGS="${CFLAGS/_FORTIFY_SOURCE=3/_FORTIFY_SOURCE=2}"
@@ -250,9 +253,9 @@ END
   echo "Building browser..."
   cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross,full
-ac_add_options --enable-profile-use=cross
 END
-  ./mach build --priority normal
+  export LDFLAGS="-Wl,--threads=1"
+  ./mach build --priority normal -j2
 }
 
 package() {
