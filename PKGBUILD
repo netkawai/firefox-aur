@@ -44,12 +44,12 @@ depends=(
 )
 makedepends=(
   cbindgen
-  clang
+  clang21
   diffutils
   imake
   jack
-  lld
-  llvm
+  lld21
+  llvm21
   mesa
   nasm
   nodejs
@@ -76,9 +76,11 @@ optdepends=(
 provides=(firefox)
 conflicts=(firefox)
 options=(
+  !debug
   !emptydirs
   !lto
   !makeflags
+  !strip
 )
 source=(
   https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
@@ -151,7 +153,7 @@ ac_add_options --enable-rust-simd
 ac_add_options --enable-linker=lld
 ac_add_options --disable-install-strip
 ac_add_options --disable-bootstrap
-ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
+ac_add_options --without-wasm-sandboxed-libraries
 
 
 # disable debug and updater
@@ -209,8 +211,6 @@ build() {
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export MOZ_BUILD_DATE="$(date -u${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH} +%Y%m%d%H%M%S)"
   export MOZ_NOSPAM=1
-  export RUSTC=/usr/bin/rustc
-  export CARGO=/usr/bin/cargo
 
   # malloc_usable_size is used in various parts of the codebase
   CFLAGS="${CFLAGS/_FORTIFY_SOURCE=3/_FORTIFY_SOURCE=2}"
@@ -254,8 +254,7 @@ END
   cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross,full
 END
-  export LDFLAGS="-Wl,--threads=1"
-  ./mach build --priority normal -j2
+  ./mach build --priority normal 
 }
 
 package() {
