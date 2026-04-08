@@ -91,7 +91,7 @@ source=(
   0002-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
   0003-Bug-2016618-Fix-Linux-sandbox-build-breakage-on-glib.patch
   0004-Use-wasm32-wasip1-target.patch
-  0005-context-popup-menu-fix.patch
+  0005-context-menu-log.patch
 )
 validpgpkeys=(
   # Mozilla Software Releases <release@mozilla.com>
