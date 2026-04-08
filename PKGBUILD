@@ -263,7 +263,7 @@ package() {
 
   local appdir="$pkgdir/usr/lib/$_pkgname"
 
-  mv $pkgdir/usr/lib/$pkgname $pkgdir/usr/lib/$_pkgname
+  #mv $pkgdir/usr/lib/$pkgname $pkgdir/usr/lib/$_pkgname
   
   install -Dvm644 /dev/stdin "$appdir/browser/defaults/preferences/vendor.js" <<END
 
@@ -304,13 +304,13 @@ END
     install -Dvm644 browser/branding/$theme/default$i.png \
       "$pkgdir/usr/share/icons/hicolor/${i}x${i}/apps/$_pkgname.png"
   done
-  install -Dvm644 browser/branding/$theme/content/about-logo.png \
-    "$pkgdir/usr/share/icons/hicolor/192x192/apps/$_pkgname.png"
-  install -Dvm644 browser/branding/$theme/content/about-logo@2x.png \
-    "$pkgdir/usr/share/icons/hicolor/384x384/apps/$_pkgname.png"
-  install -Dvm644 browser/branding/$theme/content/about-logo.svg \
+  # install -Dvm644 browser/branding/$theme/content/about-logo.png \
+  #  "$pkgdir/usr/share/icons/hicolor/192x192/apps/$_pkgname.png"
+  #install -Dvm644 browser/branding/$theme/content/about-logo@2x.png \
+  #  "$pkgdir/usr/share/icons/hicolor/384x384/apps/$_pkgname.png"
+  #install -Dvm644 browser/branding/$theme/content/about-logo.svg \
 
-    "$pkgdir/usr/share/icons/hicolor/scalable/apps/$_pkgname.svg"
+  #  "$pkgdir/usr/share/icons/hicolor/scalable/apps/$_pkgname.svg"
 
   install -Dvm644 ../$_pkgname-symbolic.svg -t "$pkgdir/usr/share/icons/hicolor/symbolic/apps"
   install -Dvm644 ../$_pkgname.desktop -t "$pkgdir/usr/share/applications"
@@ -333,9 +333,9 @@ END
 
   # Register GNOME search provider
   if false; then
-  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$pkgname.search-provider.ini" <<END
+  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$_pkgname.search-provider.ini" <<END
 [Shell Search Provider]
-DesktopId=$pkgname.desktop
+DesktopId=$_pkgname.desktop
 BusName=org.mozilla.${pkgname//-/_}.SearchProvider
 ObjectPath=/org/mozilla/${pkgname//-/_}/SearchProvider
 Version=2
