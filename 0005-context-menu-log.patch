@@ -1,3 +1,22 @@
+diff --git a/browser/base/content/browser.js b/browser/base/content/browser.js
+index 0ea3d82b88..1daa092e9e 100644
+--- a/browser/base/content/browser.js
++++ b/browser/base/content/browser.js
+@@ -1,3 +1,14 @@
++/* Diagnostic Logging for Wayland Click Issue */
++window.addEventListener("command", (e) => {
++  console.log(`[Global Diagnostic] COMMAND: target=${e.target.id} tag=${e.target.tagName} label=${e.target.getAttribute("label")}`);
++}, true);
++window.addEventListener("mousedown", (e) => {
++  console.log(`[Global Diagnostic] MOUSEDOWN: target=${e.target.id || e.target.tagName} button=${e.button}`);
++}, true);
++window.addEventListener("mouseup", (e) => {
++  console.log(`[Global Diagnostic] MOUSEUP: target=${e.target.id || e.target.tagName} button=${e.button}`);
++}, true);
++
+ /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*-
+  * This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
 diff --git a/browser/components/extensions/parent/ext-menus.js b/browser/components/extensions/parent/ext-menus.js
 index f803a19362..d656cfb8d2 100644
 --- a/browser/components/extensions/parent/ext-menus.js
@@ -95,27 +114,42 @@ index f803a19362..d656cfb8d2 100644
        };
  
 diff --git a/browser/components/places/content/places-menupopup.js b/browser/components/places/content/places-menupopup.js
-index a0affb9ecf..7ae53dd55d 100644
+index a0affb9ecf..65e86dfc8f 100644
 --- a/browser/components/places/content/places-menupopup.js
 +++ b/browser/components/places/content/places-menupopup.js
-@@ -41,6 +41,8 @@ function closingPopupEndsDrag(popup) {
+@@ -41,6 +41,11 @@ function closingPopupEndsDrag(popup) {
          "dragover",
          "dragleave",
          "dragend",
++        "mousedown",
++        "command",
++        "popuphiding",
 +        "click", // Add click event listener
 +        "mouseup", // Add mouseup event listener
        ];
        for (let event_name of event_names) {
          this.addEventListener(event_name, this);
-@@ -440,6 +442,18 @@ function closingPopupEndsDrag(popup) {
+@@ -440,6 +445,30 @@ function closingPopupEndsDrag(popup) {
        event.stopPropagation();
      }
  
++    on_mousedown(event) {
++      console.log(`[places-menupopup] Mousedown on: ${event.target.localName} id: ${event.target.id}`);
++    }
++
++    on_command(event) {
++      console.log(`[places-menupopup] COMMAND received: target=${event.target.id || event.target.localName}`);
++    }
++
++    on_popuphiding(event) {
++      console.log(`[places-menupopup] Popup Hiding triggered. Target: ${event.target.id || event.target.localName}`);
++    }
++
 +    on_click(event) {
 +      console.log(`[places-menupopup] Click event detected on: ${event.target.localName} id: ${event.target.id} button: ${event.button}`);
 +      // Check if this click is on a menuitem and if it's a left click
 +      if (event.button === 0 && (event.target.localName === "menuitem" || event.target.localName === "menu")) {
-+        console.log(`[places-menupopup] Left click on menu item: ${event.target.id || event.target.getAttribute("label")}`);
++        console.log(`[places-menupopup] Valid Left Click confirmed on: ${event.target.id || event.target.getAttribute("label")}`);
 +      }
 +    }
 +
@@ -126,19 +160,29 @@ index a0affb9ecf..7ae53dd55d 100644
      on_drop(event) {
        PlacesControllerDragHelper.currentDropTarget = event.target;
  
-@@ -606,6 +620,8 @@ function closingPopupEndsDrag(popup) {
+@@ -606,6 +635,10 @@ function closingPopupEndsDrag(popup) {
          "popupshowing",
          "popuppositioned",
          "popupshown",
++        "mousedown",
++        "command",
 +        "click", // Add click event listener
 +        "mouseup", // Add mouseup event listener
          "popuphiding",
          "popuphidden",
        ];
-@@ -676,6 +692,16 @@ function closingPopupEndsDrag(popup) {
+@@ -676,6 +709,24 @@ function closingPopupEndsDrag(popup) {
        this.style.removeProperty("pointer-events");
      }
  
++    on_mousedown(event) {
++      console.log(`[places-menupopup-arrow] Mousedown on: ${event.target.localName} id: ${event.target.id}`);
++    }
++
++    on_command(event) {
++      console.log(`[places-menupopup-arrow] COMMAND received: target=${event.target.id || event.target.localName}`);
++    }
++
 +    on_click(event) {
 +      console.log(`[places-menupopup-arrow] Click event detected on: ${event.target.localName} id: ${event.target.id} button: ${event.button}`);
 +      if (event.button === 0 && (event.target.localName === "menuitem" || event.target.localName === "menu")) {
