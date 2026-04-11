@@ -1,0 +1,69 @@
+1775919367569	addons.xpi	WARN	Checking /home/kawai/firefox-aur/src/firefox-149.0/obj/dist/bin/distribution/extensions for addons
+Window.fullScreen attribute is deprecated and will be removed in the future. browser-customtitlebar.js:68:7
+Content-Security-Policy: This site (https://www.mozilla.org) has a Report-Only policy without a report-uri directive nor a report-to directive. CSP will not block and cannot report violations of this policy. firefox
+airgap.js Report-only mode enabled airgap.js:6:1432
+TopSitesFeed: Failed to fetch data from MARS server: NetworkError when attempting to fetch resource. TopSitesFeed.sys.mjs:847
+Failed to fetch https://ads.mozilla.org/v1/ads: NetworkError when attempting to fetch resource. DiscoveryStreamFeed.sys.mjs:493:15
+No response for spocs_endpoint prop DiscoveryStreamFeed.sys.mjs:1370:19
+Key event not available on some keyboard layouts: key=“z” modifiers=“control,alt” id=“toggleSidebarKb” browser.xhtml
+Key event not available on some keyboard layouts: key=“x” modifiers=“accel,alt” id=“viewGenaiChatSidebarKb” browser.xhtml
+Key event not available on some keyboard layouts: key=“r” modifiers=“accel,alt” id=“key_toggleReaderMode” browser.xhtml
+Key event not available on some keyboard layouts: key=“i” modifiers=“accel,alt,shift” id=“key_browserToolbox” browser.xhtml
+[Global Diagnostic] COMMAND: target=key_browserConsole tag=key label=null browser.js:3:11
+[Global Diagnostic] MOUSEDOWN: target=tabbrowser-arrowscrollbox button=0 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabbrowser-arrowscrollbox button=0 browser.js:9:11
+Unexpected value {{w}} parsing width attribute. ccd270c8c839b5560cc10386689067bbdbcedc437c0f6f5caa2db3a4c69eb01c_4792.svg
+Unexpected value {{h}} parsing height attribute. ccd270c8c839b5560cc10386689067bbdbcedc437c0f6f5caa2db3a4c69eb01c_4792.svg
+Unexpected value 0 0 {{w}} {{h}} parsing viewBox attribute. ccd270c8c839b5560cc10386689067bbdbcedc437c0f6f5caa2db3a4c69eb01c_4792.svg
+[Global Diagnostic] COMMAND: target=key_browserConsole tag=key label=null browser.js:3:11
+Experiment visual-card-updates has unknown featureId: newtabRefinedCardsLayout RemoteSettingsExperimentLoader.sys.mjs:1166:21
+[Global Diagnostic] MOUSEDOWN: target=PanelUI-menu-button button=0 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=PanelUI-menu-button button=0 browser.js:9:11
+[Global Diagnostic] COMMAND: target=PanelUI-menu-button tag=toolbarbutton label=Firefox browser.js:3:11
+services.settings: blocklists/addons-bloomfilters sync already running RemoteSettingsClient.sys.mjs:706
+Failed to fetch https://ads.mozilla.org/v1/ads-preflight: NetworkError when attempting to fetch resource. DiscoveryStreamFeed.sys.mjs:493:15
+TypeError: can't access property "campaign", b is null
+    Identifier resource://gre/modules/components-utils/mozjexl.sys.mjs:1
+RemoteSettingsExperimentLoader.sys.mjs:1114:15
+services.settings: security-state/intermediates sync already running RemoteSettingsClient.sys.mjs:706
+[Global Diagnostic] MOUSEDOWN: target=tabbrowser-arrowscrollbox button=0 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabbrowser-arrowscrollbox button=0 browser.js:9:11
+[Global Diagnostic] MOUSEDOWN: target=tabbrowser-arrowscrollbox button=0 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabbrowser-arrowscrollbox button=0 browser.js:9:11
+TypeError: can't access property "trace", this.log is null AboutHomeStartupCache.sys.mjs:881:9
+[Global Diagnostic] MOUSEDOWN: target=tabbrowser-arrowscrollbox button=0 browser.js:6:11
+services.settings: main/urlbar-persisted-search-terms sync already running RemoteSettingsClient.sys.mjs:706
+[Global Diagnostic] MOUSEUP: target=tabbrowser-arrowscrollbox button=0 browser.js:9:11
+[Global Diagnostic] MOUSEDOWN: target=tabbrowser-arrowscrollbox button=0 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabbrowser-arrowscrollbox button=0 browser.js:9:11
+services.settings: main/fxmonitor-breaches sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/search-config-icons sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/search-config-v2 sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: security-state/onecrl sync already running RemoteSettingsClient.sys.mjs:706
+[Global Diagnostic] MOUSEDOWN: target=tabbrowser-arrowscrollbox button=0 browser.js:6:11
+services.settings: blocklists/gfx sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/newtab-frecency-boosted-sponsors sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/top-sites sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/webcompat-interventions sync already running RemoteSettingsClient.sys.mjs:706
+[Global Diagnostic] MOUSEDOWN: target=tabbrowser-arrowscrollbox button=0 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabbrowser-arrowscrollbox button=0 browser.js:9:11
+services.settings: main/url-parser-default-unknown-schemes-interventions sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/normandy-recipes-capabilities sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/ms-language-packs sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/search-categorization sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/third-party-cookie-blocking-exempt-urls sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/search-config-overrides-v2 sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/addons-manager-settings sync already running RemoteSettingsClient.sys.mjs:706
+[Global Diagnostic] MOUSEDOWN: target=label button=2 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabContextMenu button=2 browser.js:9:11
+services.settings: main/hijack-blocklists sync already running RemoteSettingsClient.sys.mjs:706
+services.settings: main/anti-tracking-url-decoration sync already running RemoteSettingsClient.sys.mjs:706
+[Global Diagnostic] MOUSEDOWN: target=label button=2 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabContextMenu button=2 browser.js:9:11
+[Global Diagnostic] MOUSEDOWN: target=label button=2 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabContextMenu button=2 browser.js:9:11
+[Global Diagnostic] MOUSEDOWN: target=label button=2 browser.js:6:11
+[Global Diagnostic] MOUSEUP: target=tabContextMenu button=2 browser.js:9:11
+[Global Diagnostic] COMMAND: target=context_duplicateTab tag=menuitem label=Duplicate Tab browser.js:3:11
+Content-Security-Policy: This site (https://www.mozilla.org) has a Report-Only policy without a report-uri directive nor a report-to directive. CSP will not block and cannot report violations of this policy. firefox
+airgap.js Report-only mode enabled airgap.js:6:1432
