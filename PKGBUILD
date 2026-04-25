@@ -40,7 +40,6 @@ depends=(
   nspr
   nss
   pango
-  ttf-font
 )
 makedepends=(
   cbindgen
