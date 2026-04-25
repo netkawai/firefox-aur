@@ -91,7 +91,6 @@ source=(
   0002-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
   0003-Bug-2016618-Fix-Linux-sandbox-build-breakage-on-glib.patch
   0004-Use-wasm32-wasip1-target.patch
-  0005-context-menu-log.patch
 )
 validpgpkeys=(
   # Mozilla Software Releases <release@mozilla.com>
@@ -105,7 +104,6 @@ sha256sums=('b861fdee999d9b6404e1e865d6f707c41b4bded1b5ea62affc176288c1484b8a'
             'a9b8b4a0a1f4a7b4af77d5fc70c2686d624038909263c795ecc81e0aec7711e9'
             '2a51d57d98fbda86f094bc991e1ad4dd6e8a9d32fd0836b1183bf70ec4b68915'
             '23f557fa7989adcae03cc9458d94716981dbcf0e9d6d52a289a2426e50b4b785'
-            'SKIP'
             'SKIP' )
 b2sums=('''8b1d084dc2b8a7de85cc54aef57adda94afa191d4adb7a6e6ef1339e8a3cc7a7d8a42df52f858bcff358f69382e163ba42b2142126dcdbd1ad1cdc4bad0c0114'
         'SKIP'
@@ -114,7 +112,6 @@ b2sums=('''8b1d084dc2b8a7de85cc54aef57adda94afa191d4adb7a6e6ef1339e8a3cc7a7d8a42
         '63a8dd9d8910f9efb353bed452d8b4b2a2da435857ccee083fc0c557f8c4c1339ca593b463db320f70387a1b63f1a79e709e9d12c69520993e26d85a3d742e34'
         '63c62c85ee70e22b02e9ea34e69f04f50403b7634b99fb0e996a83c963916dc4224041a0b265e54f6c224bd1777ddfdeb255037e3e30fec288695f3050278b05'
         '1a7fc030b1051df00df1b2f5b247b8c658de6cdfba0788041c830da3aaaa6ac974ab684e05feb80672aa2d2c22294cacfa93a71dc664b3e60becdd65e879fcee'
-        'SKIP'
         'SKIP' )
 # Google API keys (see https://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for Arch Linux use ONLY. For your own distribution, please
@@ -136,8 +133,6 @@ prepare() {
 
   # Fix build with Clang 22
   patch -Np1 -i ../0004-Use-wasm32-wasip1-target.patch
-
-  patch -Np1 -i ../0005-context-popup-menu-fix.patch
 
   echo -n "$_google_api_key" >google-api-key
 
@@ -254,7 +249,8 @@ END
   cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross,full
 END
-  ./mach build --priority normal 
+  ./mach build faster --priority normal 
+  ./mach run
 }
 
 package() {
