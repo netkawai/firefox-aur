@@ -248,8 +248,7 @@ END
   cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross,full
 END
-  ./mach build faster --priority normal 
-  ./mach run
+  ./mach build --priority normal 
 }
 
 package() {
