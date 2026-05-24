@@ -3,7 +3,7 @@
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
 pkgname=firefox
-pkgver=150.0
+pkgver=151.0.1
 pkgrel=1
 pkgdesc="Fast, Private & Safe Web Browser"
 url="https://www.mozilla.org/firefox/"
@@ -86,35 +86,29 @@ source=(
   $pkgname.desktop
   org.mozilla.$pkgname.metainfo.xml
   0001-Install-under-remoting-name.patch
-  0002-Bug-2033279-Make-enable-rust-simd-work-with-Rust-1.9.patch
-  0003-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
-  0004-Bug-2023597-Use-wasm32-wasip1-target-for-clang-22.1-.patch
+  0002-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
 )
 validpgpkeys=(
   # Mozilla Software Releases <release@mozilla.com>
   # https://blog.mozilla.org/security/2025/04/01/updated-gpg-key-for-signing-firefox-releases-2/
   14F26682D0916CDD81E37B6D61B7B526D98F0353
 )
-sha256sums=('fbe43df4c8a135cee4b29c375574bd9f609ee37a9f3b43bb96a83680e8ef3994'
+sha256sums=('a80ae34238cbf83a507274bc25d215ccac00934ddf26190b02a34fdce60584c0'
             'SKIP'
             'SKIP'
             'SKIP'
             'a9b8b4a0a1f4a7b4af77d5fc70c2686d624038909263c795ecc81e0aec7711e9'
             '2a51d57d98fbda86f094bc991e1ad4dd6e8a9d32fd0836b1183bf70ec4b68915'
             '23f557fa7989adcae03cc9458d94716981dbcf0e9d6d52a289a2426e50b4b785'
-            'a7364ddb3b6eab922873f35731ed5cfb61e8022a35d54edd2f80b95a4f5625ed'
-            '9f10d9bfcaa3a8dd86a8654431f820716a45a72a885c29fd6359bccc7bcdaefa'
-            'f579e02644ef9c29da5cd61d2c9213ba1c3f7a1aa8abf601bdf07cbbbadb1ce3'
-            'd6e1dbafe56bc52c8ab6cbf9542cf80e89c1857a71ce08bbbd82804909bcb76f')
-b2sums=('046ed34f4ccdeab26420bb394621887293791fe67a45b548819baaad1f93f72d675d461c9c0a9f3d88cc3ae9cd33a9d614904748b3ac70ad900f933013c397eb'
+            'f0118f1b092e471fe3c81c1e8b49a76a37f72f3263d00a18e939dcde80c90dac'
+            'c7d6572fe1ac76f6adbfb10102f284fd55690396ac0a275a5cfea9a2efa22b58')
+b2sums=('0301741891076331293e13c03ca168d283afc1b257f7bbff32784b23c817b780b84b4afcfa44c37dde65af37a210a4e18fe7e6433a07db718d982f7e91083efa'
         'SKIP'
         '63a8dd9d8910f9efb353bed452d8b4b2a2da435857ccee083fc0c557f8c4c1339ca593b463db320f70387a1b63f1a79e709e9d12c69520993e26d85a3d742e34'
         '63c62c85ee70e22b02e9ea34e69f04f50403b7634b99fb0e996a83c963916dc4224041a0b265e54f6c224bd1777ddfdeb255037e3e30fec288695f3050278b05'
         '1a7fc030b1051df00df1b2f5b247b8c658de6cdfba0788041c830da3aaaa6ac974ab684e05feb80672aa2d2c22294cacfa93a71dc664b3e60becdd65e879fcee'
-        'f5646fef13b59542438994a1593fb17b3a57ac5861fbc139269d44325159be0f13a9630a5e3838bad4d55ee9ce2e40810b4d8653dc15354e48caa04c3e9ba972'
-        '29772ea097f9f07abec2d79371885c1f9861b0655cdf03bcfb66517cb6433196f41791918bb36ccda3dceff30e46c0937d010ec43911a79e1cb025f014499660'
-        '01caaec5254c01cf7d11cd2cdc2a2909fc2105a9d9fa6c958c9520dbd49b95635d6f6ee69804218319ddbc533fe0860cfaf97fc9010341ca2edc1407d3d9e729'
-        'abf89c9a6c025f1a5c4b9dd8888eb2042ca412c966d1262a996735a171fdbdbc473461a8e751ec5c0e2f613f9d9dfd2c5d1975243e6fe074fd73a1462f78c759')
+        'c1cbb2de5011ed88e77c22c6abbc944ac2bd0f6c95bddb75f668f40566e6cad8d0090e65a5ff498055612a359f82484b41202f74e1312236e17d099e71bbc952'
+        '0420be311ae633c05d3a110b9fe5a8da288530d918ec9435c1a54d8d13bbbd06f5ee90977a9ee71d39e68bc26deb20264e712816e1dc5d7374b64a920e51b353')
 
 # Google API keys (see https://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for Arch Linux use ONLY. For your own distribution, please
@@ -128,18 +122,9 @@ prepare() {
   # Make different channels installable in parallel
   patch -Np1 -i ../0001-Install-under-remoting-name.patch
 
-  # Fix build with Rust 1.95.0
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=2033279
-  patch -Np1 -i ../0002-Bug-2033279-Make-enable-rust-simd-work-with-Rust-1.9.patch
-
   # Fix build with glibc 2.43
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1999625
-  patch -Np1 -i ../0003-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
-
-  # Fix build with Clang 22
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=2023597
-  # Right now I force to use Clang 21
-  #patch -Np1 -i ../0004-Bug-2023597-Use-wasm32-wasip1-target-for-clang-22.1-.patch
+  patch -Np1 -i ../0002-Patch-glsl-optimizer-to-build-with-glibc-2.43.patch
 
   echo -n "$_google_api_key" >google-api-key
 
@@ -264,6 +249,7 @@ package() {
   DESTDIR="$pkgdir" ./mach install
 
   local appdir="$pkgdir/usr/lib/$pkgname"
+  touch "$appdir/is-packaged-app"
 
   install -Dvm644 /dev/stdin "$appdir/browser/defaults/preferences/vendor.js" <<END
 
@@ -324,7 +310,7 @@ END
 
   # Replace duplicate binary with wrapper
   # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
-  ln -srfv "$pkgdir/usr/bin/$pkgname" "$pkgdir/usr/lib/$pkgname/firefox-bin"
+  ln -srfv "$pkgdir/usr/bin/$pkgname" "$appdir/firefox-bin"
 
   # Use system certificates
   if [[ -e $appdir/libnss3.so ]]; then
