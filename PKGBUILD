@@ -42,12 +42,12 @@ depends=(
 )
 makedepends=(
   cbindgen
-  clang21
+  clang
   diffutils
   imake
   jack
-  lld21
-  llvm21
+  lld
+  llvm
   mesa
   nasm
   nodejs
@@ -238,8 +238,8 @@ END
   
   fi
   echo "Building browser..."
-  cat >.mozconfig ../mozconfig - <<END
-ac_add_options --enable-lto=cross,full
+  cat > .mozconfig ../mozconfig - << END
+ac_add_options --enable-lto=thin,cross  
 END
   ./mach build --priority normal 
 }
